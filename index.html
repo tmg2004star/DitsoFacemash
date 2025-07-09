@@ -14,7 +14,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background: linear-gradient(to bottom right, #f0f2f5, #e0e2e5); /* Gradient background */
             color: #222;
             min-height: 100vh; /* Hakikisha body inachukua urefu wote wa skrini */
@@ -74,7 +74,7 @@
             display: flex;
             flex-direction: column; /* Panga picha moja chini ya nyingine kwa mobile */
             justify-content: center;
-            align-items: center; /* Centering for portrait mode */
+            align-items: center;
             gap: 30px; /* Nafasi kati ya picha */
             margin: 30px 20px;
             width: 100%;
@@ -568,7 +568,7 @@
             Powered by TMG DIGtech</a></div>
         <header>
             <h1>DITSO FACEMASH</h1>
-            <h2>NANI WA MOTO?</h2>
+            <h2>NANI WA MOTOKWANI?</h2>
         </header>
         <div class="container" id="votingArea">
             <p style="text-align: center; color: #666; font-size: 1.1rem; padding: 20px;">Hakuna picha za kutosha. Admin tafadhali pakia picha na majina.</p>
@@ -930,8 +930,12 @@
             const fileInput = document.getElementById('imageUpload');
             const file = fileInput.files[0];
 
-            if (!name || !file) {
-                alert('Tafadhali jaza jina na chagua picha.');
+            if (!name) { // Check for name specifically
+                alert('Tafadhali jaza jina.');
+                return;
+            }
+            if (!file) { // Check for file specifically
+                alert('Tafadhali chagua picha.');
                 return;
             }
 
@@ -948,8 +952,8 @@
                     });
 
                 if (uploadError) {
-                    console.error('Error uploading image (Admin):', uploadError.message);
-                    alert('Kosa wakati wa kupakia picha (Admin): ' + uploadError.message);
+                    console.error('Error uploading image (Admin):', uploadError); // Log full error object
+                    alert('Kosa wakati wa kupakia picha (Admin): ' + (uploadError.message || 'Angalia console kwa maelezo zaidi.'));
                     return;
                 }
 
@@ -973,8 +977,8 @@
                     .select(); // Request inserted data back to get the ID
 
                 if (insertError) {
-                    console.error('Error inserting participant data (Admin):', insertError.message);
-                    alert('Kosa wakati wa kuweka data ya mshiriki (Admin): ' + insertError.message);
+                    console.error('Error inserting participant data (Admin):', insertError); // Log full error object
+                    alert('Kosa wakati wa kuweka data ya mshiriki (Admin): ' + (insertError.message || 'Angalia console kwa maelezo zaidi.'));
                     // Optionally, delete the uploaded file if DB insert fails
                     await supabase.storage.from(BUCKET_NAME).remove([filePath]);
                     return;
@@ -988,8 +992,8 @@
                 loadParticipantsFromSupabase();
 
             } catch (error) {
-                console.error('An unexpected error occurred during admin image upload:', error.message);
-                alert('Kosa lisilotarajiwa limetokea wakati wa kupakia picha ya admin: ' + error.message);
+                console.error('An unexpected error occurred during admin image upload:', error); // Log full error object
+                alert('Kosa lisilotarajiwa limetokea wakati wa kupakia picha ya admin: ' + (error.message || 'Angalia console kwa maelezo zaidi.'));
             }
         }
 
@@ -1063,6 +1067,107 @@
             loadParticipantsFromSupabase();
         });
 
+        /**
+         * Handles student image submission, including:
+         * 1. Validation of inputs and consent.
+         * 2. Uploading the image to Supabase Storage.
+         * 3. Getting the public URL of the uploaded image.
+         * 4. Inserting participant name and image URL into Supabase Database.
+         * 5. Providing user feedback.
+         */
+        async function submitStudentImage() {
+            const name = document.getElementById('studentName').value.trim();
+            const fileInput = document.getElementById('studentImage');
+            const file = fileInput.files[0];
+            const consent = document.getElementById('studentConsent').checked;
+
+            console.log('Student Name:', name);
+            console.log('File selected:', file ? file.name : 'No file');
+            console.log('Consent checked:', consent); // Log the consent value
+
+            // 1. Validation - Specific messages
+            if (!name) { // Check for name specifically
+                alert("Tafadhali jaza jina.");
+                return;
+            }
+            if (!file) { // Check for file specifically
+                alert("Tafadhali chagua picha.");
+                return;
+            }
+            if (!consent) { // Check for consent specifically
+                alert("Lazima ukubali Terms & Privacy ili kuendelea.");
+                return;
+            }
+
+            // Indicate processing to the user
+            const submitButton = document.querySelector('.student-upload button');
+            submitButton.textContent = 'Inapakia... Tafadhali Subiri...';
+            submitButton.disabled = true;
+
+            try {
+                // 2. Upload the selected image file to Supabase Storage
+                // Generate a unique file name using timestamp + original name
+                const fileName = `${Date.now()}-${file.name}`;
+                const filePath = `student_uploads/${fileName}`; // Store in a subfolder for clarity
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(filePath, file, {
+                        cacheControl: '3600', // Cache for 1 hour
+                        upsert: false // Do not overwrite if file exists
+                    });
+
+                if (uploadError) {
+                    console.error('Error uploading student image:', uploadError); // Log full error object
+                    alert('Kosa wakati wa kupakia picha yako: ' + (uploadError.message || 'Angalia console kwa maelezo zaidi.'));
+                    return;
+                }
+
+                // 3. Get the public URL of the uploaded file
+                const { data: publicUrlData } = supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(filePath);
+
+                if (!publicUrlData || !publicUrlData.publicUrl) {
+                    throw new Error('Could not get public URL for your uploaded image.');
+                }
+                const imageUrl = publicUrlData.publicUrl;
+                console.log('Student uploaded image URL:', imageUrl);
+
+                // 4. Insert a new row in the 'participant' table with the participant’s name and the image URL
+                const { data: insertData, error: insertError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .insert([
+                        { name: name, image_url: imageUrl, votes: 0 } // Initialize votes to 0 for new participants
+                    ]);
+
+                if (insertError) {
+                    console.error('Error inserting student participant data:', insertError); // Log full error object
+                    alert('Kosa wakati wa kuhifadhi taarifa zako: ' + (insertError.message || 'Angalia console kwa maelezo zaidi.'));
+                    // Optionally, delete the uploaded file if DB insert fails
+                    await supabase.storage.from(BUCKET_NAME).remove([filePath]);
+                    return;
+                }
+
+                alert("Picha yako imewasilishwa! Asante kwa kushiriki.");
+
+                // Clear form fields and reset button
+                document.getElementById('studentName').value = '';
+                document.getElementById('studentImage').value = '';
+                document.getElementById('studentConsent').checked = false;
+
+                // 5. Reload data from Supabase to update the main display
+                loadParticipantsFromSupabase();
+
+            } catch (error) {
+                console.error('An unexpected error occurred during student submission:', error); // Log full error object
+                alert('Kosa lisilotarajiwa limetokea: ' + (error.message || 'Angalia console kwa maelezo zaidi.'));
+            } finally {
+                // Always reset button state
+                submitButton.textContent = 'Tuma Picha';
+                submitButton.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
