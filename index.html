@@ -1,516 +1,807 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>DITSO FACEMASH </title>
-<style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background: #fafafa;
-    color: #222;
-    user-select: none;
-  }
-  #powered {
-    position: fixed;
-    top: 12px;
-    right: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #555;
-    letter-spacing: 0.06em;
-    opacity: 0.7;
-  }
-  header {
-    padding: 60px 20px 30px;
-    text-align: center;
-  }
-  header h1 {
-    margin: 0;
-    font-weight: 900;
-    font-size: 3.5rem;
-    letter-spacing: 0.12em;
-    color: #202020;
-    text-transform: uppercase;
-  }
-  header h2 {
-    margin: 8px 0 0;
-    font-weight: 700;
-    font-size: 1.7rem;
-    color: #555;
-    font-style: italic;
-    letter-spacing: 0.08em;
-  }
-  .container {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin: 40px 20px;
-    flex-wrap: wrap;
-  }
-  .face {
-    background: white;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    width: 230px;
-    box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-    transition: border-color 0.2s ease;
-    cursor: pointer;
-  }
-  .face:hover {
-    border-color: #4267b2;
-  }
-  .face img {
-    width: 100%;
-    height: 230px;
-    object-fit: cover;
-    border-radius: 6px 6px 0 0;
-  }
-  .face h3 {
-    margin: 12px 0 8px;
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: #111;
-  }
-  .face button {
-    margin-bottom: 15px;
-    background: #4267b2;
-    border: none;
-    color: white;
-    padding: 10px 0;
-    width: 100%;
-    font-size: 1.1rem;
-    font-weight: 700;
-    border-radius: 0 0 8px 8px;
-    letter-spacing: 0.05em;
-    transition: background 0.3s ease;
-  }
-  .face button:hover {
-    background: #365899;
-  }
-  #leaderboard {
-    max-width: 420px;
-    margin: 30px auto 50px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-    padding: 20px 25px;
-    font-weight: 600;
-    color: #222;
-    letter-spacing: 0.05em;
-  }
-  #leaderboard h3 {
-    margin: 0 0 18px;
-    font-weight: 900;
-    font-size: 1.6rem;
-    letter-spacing: 0.1em;
-    text-align: center;
-  }
-  #leaderboard div {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 1.1rem;
-  }
-  #leaderboard div:last-child {
-    border-bottom: none;
-  }
-  .admin {
-    max-width: 480px;
-    background: white;
-    margin: 0 auto 50px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-    padding: 25px 30px;
-  }
-  .admin h3 {
-    margin-top: 0;
-    font-weight: 900;
-    font-size: 1.8rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  .admin input[type="password"], .admin input[type="text"], .admin input[type="file"] {
-    width: 100%;
-    font-size: 1rem;
-    padding: 12px 10px;
-    margin-bottom: 15px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    transition: border-color 0.25s ease;
-  }
-  .admin input:focus {
-    outline: none;
-    border-color: #4267b2;
-  }
-  .admin button {
-    width: 100%;
-    font-weight: 700;
-    font-size: 1.1rem;
-    background: #4267b2;
-    color: white;
-    border: none;
-    padding: 12px 0;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  .admin button:hover {
-    background: #365899;
-  }
-  .admin button.resetAll {
-    background: #dc3545;
-    margin-top: 12px;
-  }
-  .admin button.resetAll:hover {
-    background: #a71d2a;
-  }
-  .hidden { display: none; }
-  .nav-buttons {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .nav-buttons button {
-    background: #888;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s ease;
-  }
-  .nav-buttons button:hover {
-    background: #444;
-  }
-  @media (max-width: 580px) {
-    .container {
-      flex-direction: column;
-      gap: 30px;
-      align-items: center;
-    }
-    .face {
-      width: 90vw;
-      max-width: 320px;
-    }
-  }
-</style>
-<button onclick="showRules()" style="display:block; margin: 30px auto; padding: 10px 20px; background:#444; color:white; font-weight:700; border:none; border-radius:6px;">Rules & Privacy</button>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DITSO FACEMASH </title>
 
-<div id="rulesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000;">
-  <div style="background:white; max-width:600px; margin:100px auto; padding:25px 30px; border-radius:10px; position:relative;">
-    <h2 style="margin-top:0;">Rules & Privacy Policy</h2>
-    <p><strong>DITSO Facemash</strong> ni app ya mashindano ya kijanja ili kuburudisha wanafunzi wa DIT Mwanza Campus kwa kuangalia nani "wa moto zaidi" kwa wiki au mwezi.</p>
-    <p><strong>Picha</strong> zinazopakiwa ni kwa ridhaa ya washiriki wenyewe. Hatupokei wala kuchapisha picha zilizopatikana bila idhini ya mhusika.</p>
-    <p>Data kama kura na matokeo hazitumiwi kwa madhumuni ya kibiashara wala kutangaza watu bila idhini yao.</p>
-    <p><strong>Washindi</strong> wanaopata kura nyingi hupokea zawadi kutoka kwa TMG Digital kulingana na promosheni husika.</p>
-    <p>Tunazingatia <strong>faragha</strong>, <strong>heshima</strong> na <strong>burudani</strong> pekee. Kama kuna malalamiko, tafadhali wasiliana na admin kupitia app.</p>
-    <p style="margin-top: 20px;">App hii imetengenezwa na <strong>Trust Erastus</strong>, mwanafunzi wa DIT Mwanza na mwanzilishi wa TMG DIGtech.</p>
-    <button onclick="closeRules()" style="margin-top:20px; background:#dc3545; color:white; font-weight:700; border:none; padding:10px 20px; border-radius:6px;">Funga</button>
-  </div>
-</div>
+    <style>
+        /* Your existing styles here */
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: #fafafa;
+            color: #222;
+            user-select: none;
+        }
+        #powered {
+            position: fixed;
+            top: 12px;
+            right: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            letter-spacing: 0.06em;
+            opacity: 0.7;
+        }
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-weight: 900;
+            font-size: 3.5rem;
+            letter-spacing: 0.12em;
+            color: #202020;
+            text-transform: uppercase;
+        }
+        header h2 {
+            margin: 8px 0 0;
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: #555;
+            font-style: italic;
+            letter-spacing: 0.08em;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 20px;
+            flex-wrap: wrap;
+        }
+        .face {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 230px;
+            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+            transition: border-color 0.2s ease;
+            cursor: pointer;
+        }
+        .face:hover {
+            border-color: #4267b2;
+        }
+        .face img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 6px 6px 0 0;
+        }
+        .face h3 {
+            margin: 12px 0 8px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #111;
+        }
+        .face button {
+            margin-bottom: 15px;
+            background: #4267b2;
+            border: none;
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 0 0 8px 8px;
+            letter-spacing: 0.05em;
+            transition: background 0.3s ease;
+        }
+        .face button:hover {
+            background: #365899;
+        }
+        #leaderboard {
+            max-width: 420px;
+            margin: 30px auto 50px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            padding: 20px 25px;
+            font-weight: 600;
+            color: #222; /* Hii ni rangi ya maandishi, inatosha */
+            letter-spacing: 0.05em;
+
+            /* MISTARI MIPYA YA ZIADA KWA AJILI YA KUTATUA TATIZO */
+            position: relative; /* Muhimu kwa z-index kufanya kazi */
+            z-index: 9999;     /* Kuiweka juu ya vipengele vingine */
+            border: 5px solid blue !important; /* Mpaka mkali wa bluu ili kuonekana */
+            background-color: lightyellow !important; /* Background ya njano nyepesi */
+        }
+        #leaderboard h3 {
+            margin: 0 0 18px;
+            font-weight: 900;
+            font-size: 1.6rem;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+        #leaderboard div {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1.1rem;
+        }
+        #leaderboard div:last-child {
+            border-bottom: none;
+        }
+        .admin {
+            max-width: 480px;
+            background: white;
+            margin: 0 auto 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            padding: 25px 30px;
+        }
+        .admin h3 {
+            margin-top: 0;
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .admin input[type="password"], .admin input[type="text"], .admin input[type="file"] {
+            width: 100%;
+            font-size: 1rem;
+            padding: 12px 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.25s ease;
+        }
+        .admin input:focus {
+            outline: none;
+            border-color: #4267b2;
+        }
+        .admin button {
+            width: 100%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: #4267b2;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .admin button:hover {
+            background: #365899;
+        }
+        .admin button.resetAll {
+            background: #dc3545;
+            margin-top: 12px;
+        }
+        .admin button.resetAll:hover {
+            background: #a71d2a;
+        }
+        .hidden { display: none; }
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .nav-buttons button {
+            background: #888;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+        .nav-buttons button:hover {
+            background: #444;
+        }
+        @media (max-width: 580px) {
+            .container {
+                flex-direction: column;
+                gap: 30px;
+                align-items: center;
+            }
+            .face {
+                width: 90vw;
+                max-width: 320px;
+            }
+        }
+    </style>
+    <button onclick="showRules()" style="display:block; margin: 30px auto; padding: 10px 20px; background:#444; color:white; font-weight:700; border:none; border-radius:6px;">Rules & Privacy</button>
+
+    <div id="rulesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000;">
+        <div style="background:white; max-width:600px; margin:100px auto; padding:25px 30px; border-radius:10px; position:relative;">
+            <h2 style="margin-top:0;">Rules & Privacy Policy</h2>
+            <p><strong>DITSO Facemash</strong> ni app ya mashindano ya kijanja ili kuburudisha wanafunzi wa DIT Mwanza Campus kwa kuangalia nani "wa moto zaidi" kwa wiki au mwezi.</p>
+            <p><strong>Picha</strong> zinazopakiwa ni kwa ridhaa ya washiriki wenyewe. Hatupokei wala kuchapisha picha zilizopatikana bila idhini ya mhusika.</p>
+            <p>Data kama kura na matokeo hazitumiwi kwa madhumuni ya kibiashara wala kutangaza watu bila idhini yao.</p>
+            <p><strong>Washindi</strong> wanaopata kura nyingi hupokea zawadi kutoka kwa TMG Digital kulingana na promosheni husika.</p>
+            <p>Tunazingatia <strong>faragha</strong>, <strong>heshima</strong> na <strong>burudani</strong> pekee. Kama kuna malalamiko, tafadhali wasiliana na admin kupitia app.</p>
+            <p style="margin-top: 20px;">App hii imetengenezwa na <strong>Trust Erastus</strong>, mwanafunzi wa DIT Mwanza na mwanzilishi wa TMG DIGtech.</p>
+            <button onclick="closeRules()" style="margin-top:20px; background:#dc3545; color:white; font-weight:700; border:none; padding:10px 20px; border-radius:6px;">Funga</button>
+        </div>
+    </div>
 
 </head>
 <body>
 
-  <!-- Add this inside <body>, baada ya vitu vingine -->
-<button id="aboutBtn" style="position: fixed; bottom: 15px; right: 15px; background: #4267b2; color: white; border: none; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 8px rgb(0 0 0 / 0.2); z-index: 1000;">
-  About Us
-</button>
+    <button id="aboutBtn" style="position: fixed; bottom: 15px; right: 15px; background: #4267b2; color: white; border: none; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 8px rgb(0 0 0 / 0.2); z-index: 1000;">
+        About Us
+    </button>
 
-<!-- Modal -->
-<div id="aboutModal" style="display:none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100vw; height: 100vh; overflow: auto; background-color: rgba(0,0,0,0.6);">
-  <div style="background: white; margin: 10% auto; padding: 20px 30px; border-radius: 10px; max-width: 500px; position: relative; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);">
-    <h2 style="text-align: center; font-weight: 900; margin-bottom: 15px;">About DITSO FACEMASH</h2>
-    <p>
-      DITSO FACEMASH ni jukwaa la kipekee lililoundwa kwa ajili ya wanafunzi wa DIT Campus Mwanza kujiburudisha na kujionea nani ana mvuto zaidi au ni "moto" chuoni.
-    </p>
-    <p>
-      Mradi huu umeanzishwa na <strong>Trust Erastus</strong>, mwanafunzi wa DIT Campus Mwanza na founder wa TMG DIGtech.
-    </p>
-    <p>
-      Lengo ni kuongeza mshikamano, burudani, na mshindani wa kirafiki kati ya wanafunzi.
-    </p>
-    <p>
-      Usisahau kushiriki, kupiga kura, na kushindana kwa joto! Zawadi zitatolewa kwa washindi wa wiki na mwezi.
-    </p>
-    <button id="closeAbout" style="position: absolute; top: 10px; right: 15px; background: #dc3545; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: 700;">X</button>
-  </div>
-</div>
+    <div id="aboutModal" style="display:none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100vw; height: 100vh; overflow: auto; background-color: rgba(0,0,0,0.6);">
+        <div style="background: white; margin: 10% auto; padding: 20px 30px; border-radius: 10px; max-width: 500px; position: relative; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);">
+            <h2 style="text-align: center; font-weight: 900; margin-bottom: 15px;">About DITSO FACEMASH</h2>
+            <p>
+                DITSO FACEMASH ni jukwaa la kipekee lililoundwa kwa ajili ya wanafunzi wa DIT Campus Mwanza kujiburudisha na kujionea nani ana mvuto zaidi au ni "moto" chuoni.
+            </p>
+            <p>
+                Mradi huu umeanzishwa na <strong>Trust Erastus</strong>, mwanafunzi wa DIT Campus Mwanza na founder wa TMG DIGtech.
+            </p>
+            <p>
+                Lengo ni kuongeza mshikamano, burudani, na mshindani wa kirafiki kati ya wanafunzi.
+            </p>
+            <p>
+                Usisahau kushiriki, kupiga kura, na kushindana kwa joto! Zawadi zitatolewa kwa washindi wa wiki na mwezi.
+            </p>
+            <button id="closeAbout" style="position: absolute; top: 10px; right: 15px; background: #dc3545; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: 700;">X</button>
+        </div>
+    </div>
 
-<script>
-  const aboutBtn = document.getElementById('aboutBtn');
-  const aboutModal = document.getElementById('aboutModal');
-  const closeAbout = document.getElementById('closeAbout');
+    <script>
+        const aboutBtn = document.getElementById('aboutBtn');
+        const aboutModal = document.getElementById('aboutModal');
+        const closeAbout = document.getElementById('closeAbout');
 
-  aboutBtn.addEventListener('click', () => {
-    aboutModal.style.display = 'block';
-  });
+        aboutBtn.addEventListener('click', () => {
+            aboutModal.style.display = 'block';
+        });
 
-  closeAbout.addEventListener('click', () => {
-    aboutModal.style.display = 'none';
-  });
+        closeAbout.addEventListener('click', () => {
+            aboutModal.style.display = 'none';
+        });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === aboutModal) {
-      aboutModal.style.display = 'none';
-    }
-  });
-</script>
+        window.addEventListener('click', (event) => {
+            if (event.target === aboutModal) {
+                aboutModal.style.display = 'none';
+            }
+        });
+    </script>
 
 
-<div id="powered"><a href="https://www.instagram.com/tmg_digital_tech?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
-  Powered by TMG DIGtech</a></div>
-<header>
-  <h1>DITSO FACEMASH</h1>
-  <h2>NANI WA MOTO?</h2>
-</header>
-<div class="container" id="votingArea">
-  <p>Hakuna picha za kutosha. Admin tafadhali pakia picha na majina.</p>
-</div>
-<div class="nav-buttons hidden" id="navButtons">
-  <button onclick="showPrevious()">Previous</button>
-  <button onclick="showNext()">Next</button>
-</div>
-<div id="leaderboard" class="hidden"></div>
+    <div id="powered"><a href="https://www.instagram.com/tmg_digital_tech?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+        Powered by TMG DIGtech</a></div>
+    <header>
+        <h1>DITSO FACEMASH</h1>
+        <h2>NANI WA MOTO?</h2>
+    </header>
+    <div class="container" id="votingArea">
+        <p>Hakuna picha za kutosha. Admin tafadhali pakia picha na majina.</p>
+    </div>
+    <div class="nav-buttons hidden" id="navButtons">
+        <button onclick="showPrevious()">Previous</button>
+        <button onclick="showNext()">Next</button>
+    </div>
+    <div id="leaderboard" class="hidden"></div>
 
 
-<div class="student-upload" style="max-width: 480px; margin: 40px auto; background: white; padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-  <h3 style="text-align:center;">Tuma Picha Yako</h3>
-  <p style="font-size: 14px; color: #555;">Unaruhusiwa kutuma picha yako kwa hiari ili ushiriki kwenye DITSO Facemash. Tafadhali jaza taarifa zako kisha pakia picha.</p>
-  <input type="text" id="studentName" placeholder="Jina Kamili" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:6px;" />
-  <input type="file" id="studentImage" accept="image/*" style="width:100%; padding:10px; margin:10px 0;"/>
-  <label style="font-size: 14px; display: block; margin: 10px 0;">
-    <input type="checkbox" id="studentConsent" />
-    Ninakubali <a href="#" onclick="showRules()" style="color:#4267b2;">Terms & Privacy</a> na ninatoa idhini ya picha yangu kutumika kwenye app hii.
-  </label>
-  <button onclick="submitStudentImage()" style="width:100%; padding:12px; font-weight:bold; background:#4267b2; color:white; border:none; border-radius:6px; font-size:16px;">Tuma Picha</button>
-</div>
+    <div class="student-upload" style="max-width: 480px; margin: 40px auto; background: white; padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <h3 style="text-align:center;">Tuma Picha Yako</h3>
+        <p style="font-size: 14px; color: #555;">Unaruhusiwa kutuma picha yako kwa hiari ili ushiriki kwenye DITSO Facemash. Tafadhali jaza taarifa zako kisha pakia picha.</p>
+        <input type="text" id="studentName" placeholder="Jina Kamili" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:6px;" />
+        <input type="file" id="studentImage" accept="image/*" style="width:100%; padding:10px; margin:10px 0;"/>
+        <label style="font-size: 14px; display: block; margin: 10px 0;">
+            <input type="checkbox" id="studentConsent" />
+            Ninakubali <a href="#" onclick="showRules()" style="color:#4267b2;">Terms & Privacy</a> na ninatoa idhini ya picha yangu kutumika kwenye app hii.
+        </label>
+        <button onclick="submitStudentImage()" style="width:100%; padding:12px; font-weight:bold; background:#4267b2; color:white; border:none; border-radius:6px; font-size:16px;">Tuma Picha</button>
+    </div>
 
 
-<div class="admin">
-  <h3>Admin Login</h3>
-  <input type="password" id="adminPass" placeholder="Ingiza password ya admin" />
-  <button onclick="checkAdmin()">INGIA</button>
-  <div id="adminControls" class="hidden">
-    <h4>Upload Picha Mpya</h4>
-    <input type="file" id="imageUpload" accept="image/*" />
-    <input type="text" id="imageName" placeholder="Jina la mwanafunzi" />
-    <button onclick="addNewImage()">Weka Picha</button>
-    <hr style="margin: 20px 0;" />
-    <button onclick="resetVotes()">Futa Kura Zote (Reset Leaderboard)</button>
-    <button onclick="resetAll()" class="resetAll">Futa Picha Zote na Kura Zote</button>
-  </div>
-</div>
+    <div class="admin">
+        <h3>Admin Login</h3>
+        <input type="password" id="adminPass" placeholder="Ingiza password ya admin" />
+        <button onclick="checkAdmin()">INGIA</button>
+        <div id="adminControls" class="hidden">
+            <h4>Upload Picha Mpya</h4>
+            <input type="file" id="imageUpload" accept="image/*" />
+            <input type="text" id="imageName" placeholder="Jina la mwanafunzi" />
+            <button onclick="addNewImage()">Weka Picha</button>
+            <hr style="margin: 20px 0;" />
+            <button onclick="resetVotes()">Futa Kura Zote (Reset Leaderboard)</button>
+            <button onclick="resetAll()" class="resetAll">Futa Picha Zote na Kura Zote</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Initialize Supabase client
+        // REPLACE WITH YOUR ACTUAL SUPABASE PROJECT URL AND ANON KEY
+        const SUPABASE_URL = 'https://ealyabcliyzsgzbxdgan.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhbHlhYmNsaXl6c2d6YnhkZ2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4OTE1NjMsImV4cCI6MjA2NzQ2NzU2M30._-nDq6IAVbfUcQ_-vZqsB8MyBmk7Dcx1KnRknWuj8KA';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        console.log('Supabase connected:', supabase);
+
+        const BUCKET_NAME = 'facemash-uploads'; // Your Supabase Storage bucket name
+        const PARTICIPANT_TABLE_NAME = 'participant'; // Your Supabase Database table name for participants
+
+        let data = []; // This array will now be populated from Supabase, or continue to be used for local rendering if needed.
+
+        // Function to load participants from Supabase Database
+        async function loadParticipantsFromSupabase() {
+            console.log('Loading participants from Supabase...');
+            const { data: participants, error } = await supabase
+                .from(PARTICIPANT_TABLE_NAME)
+                .select('*'); // Select all columns from your participant table
+
+            if (error) {
+                console.error('Error loading participants:', error.message);
+                // alert('Error loading participants: ' + error.message); // Too aggressive for initial load
+                return;
+            }
+
+            if (participants) {
+                // Map Supabase data to your existing `data` structure
+                data = participants.map(p => ({
+                    id: p.id, // Assuming your table has an 'id' column
+                    name: p.name,
+                    img: p.image_url,
+                    votes: p.votes || 0, // Assuming a 'votes' column, default to 0 if null/undefined
+                    voted: false // This 'voted' state should likely be managed client-side per session or per user if you implement user authentication
+                }));
+                console.log('Participants loaded from Supabase:', data);
+                renderFaces(); // Re-render faces after loading data
+                renderLeaderboard(); // Re-render leaderboard after loading data
+            }
+        }
 
 
-<script>
-let data = [];
+        function saveData() {
+            // This function will now be less critical for persistent data as Supabase handles it.
+            // However, for client-side 'voted' state or temporary local data, it can still be used.
+            localStorage.setItem('facemashData', JSON.stringify(data));
+        }
 
-function saveData() {
-  localStorage.setItem('facemashData', JSON.stringify(data));
-}
+        function loadData() {
+            // This function can now call loadParticipantsFromSupabase for the main data.
+            // For local 'voted' state, you might still load from localStorage.
+            const saved = localStorage.getItem('facemashData');
+            if (saved) {
+                // This part can be adapted if you want to merge local data (like 'voted' status) with Supabase data
+                // For simplicity, we'll let Supabase be the primary data source on page load.
+            }
+        }
 
-function loadData() {
-  const saved = localStorage.getItem('facemashData');
-  if (saved) data = JSON.parse(saved);
-}
+        function renderFaces() {
+            const area = document.getElementById('votingArea');
+            if (data.length < 2) {
+                area.innerHTML = '<p>Hakuna picha za kutosha. Tafadhali admin pakia picha na majina.</p>';
+                hideLeaderboard();
+                document.getElementById('navButtons').classList.add('hidden');
+                return;
+            }
+            area.innerHTML = '';
+            // Show first two pictures to start
+            currentIndex = 0;
+            showPair(currentIndex);
+            document.getElementById('navButtons').classList.remove('hidden');
+            renderLeaderboard();
+        }
 
-function renderFaces() {
-  const area = document.getElementById('votingArea');
-  if (data.length < 2) {
-    area.innerHTML = '<p>Hakuna picha za kutosha. Tafadhali admin pakia picha na majina.</p>';
-    hideLeaderboard();
-    document.getElementById('navButtons').classList.add('hidden');
-    return;
-  }
-  area.innerHTML = '';
-  // Show first two pictures to start
-  currentIndex = 0;
-  showPair(currentIndex);
-  document.getElementById('navButtons').classList.remove('hidden');
-  renderLeaderboard();
-}
+        let currentIndex = 0;
 
-let currentIndex = 0;
+        function showPair(index) {
+            const area = document.getElementById('votingArea');
+            area.innerHTML = '';
+            if (data.length < 2) return;
 
-function showPair(index) {
-  const area = document.getElementById('votingArea');
-  area.innerHTML = '';
-  if (data.length < 2) return;
+            // Make sure index stays within bounds for pairs
+            if (index < 0) currentIndex = data.length - 2;
+            else if (index > data.length - 2) currentIndex = 0;
+            else currentIndex = index;
 
-  // Make sure index stays within bounds for pairs
-  if (index < 0) currentIndex = data.length - 2;
-  else if (index > data.length - 2) currentIndex = 0;
-  else currentIndex = index;
+            const i = currentIndex;
+            const j = currentIndex + 1;
 
-  const i = currentIndex;
-  const j = currentIndex + 1;
+            [i, j].forEach(idx => {
+                const face = document.createElement('div');
+                face.className = 'face';
+                face.innerHTML = `
+                    <img src="${data[idx].img}" alt="${data[idx].name}" />
+                    <h3>${data[idx].name}</h3>
+                    <button onclick="vote('${data[idx].id}')" ${data[idx].voted ? 'disabled' : ''}>Mpigie Kura</button>
+                `;
+                area.appendChild(face);
+            });
+        }
 
-  [i, j].forEach(idx => {
-    const face = document.createElement('div');
-    face.className = 'face';
-    face.innerHTML = `
-      <img src="${data[idx].img}" alt="${data[idx].name}" />
-      <h3>${data[idx].name}</h3>
-      <button onclick="vote(${idx})" ${data[idx].voted ? 'disabled' : ''}>Mpigie Kura</button>
-    `;
-    area.appendChild(face);
-  });
-}
+        function showNext() {
+            showPair(currentIndex + 1);
+        }
 
-function showNext() {
-  showPair(currentIndex + 1);
-}
+        function showPrevious() {
+            showPair(currentIndex - 1);
+        }
 
-function showPrevious() {
-  showPair(currentIndex - 1);
-}
-
-function checkAdmin() {
-  const passInput = document.getElementById('adminPass');
-  const pass = passInput.value;
-  if (pass === '1234') {
-    document.getElementById('adminControls').classList.remove('hidden');
-    alert('Umeingia kama Admin');
-    passInput.value = '';
-  } else {
-    alert('Password sio sahihi');
-    document.getElementById('adminControls').classList.add('hidden');
-  }
-}
-
-
-function vote(index) {
-  if(data[index].voted) {
-    alert('Umeshapiga kura kwa huyu tayari!');
-    return;
-  }
-  data[index].votes++;
-  data[index].voted = true; // Mark that user has voted this picture
-  saveData();
-  renderLeaderboard();
-  alert(`Umeweza kumpigia kura ${data[index].name}!`);
-  showNext();
-}
-
-function renderLeaderboard() {
-  const leaderboard = document.getElementById('leaderboard');
-  if (data.length === 0) {
-    hideLeaderboard();
-    return;
-  }
-  leaderboard.classList.remove('hidden');
-  leaderboard.innerHTML = '<h3>Leaderboard - Wanafunzi Wenye Kura Zaidi</h3>';
-  const sorted = [...data].sort((a, b) => b.votes - a.votes);
-  sorted.forEach((d, i) => {
-    const div = document.createElement('div');
-    div.textContent = `${i + 1}. ${d.name} - Kura: ${d.votes}`;
-    leaderboard.appendChild(div);
-  });
-}
-
-function hideLeaderboard() {
-  const leaderboard = document.getElementById('leaderboard');
-  leaderboard.classList.add('hidden');
-  leaderboard.innerHTML = '';
-}
-
-function resetVotes() {
-  if (!confirm('Unataka kufuta kura zote?')) return;
-  data.forEach(d => {
-    d.votes = 0;
-    d.voted = false;
-  });
-  saveData();
-  renderFaces();
-  alert('Kura zote zimefutwa!');
-}
-
-function resetAll() {
-  if (!confirm('Una uhakika unataka kufuta picha zote na kura zote? Hii haiwezi kurejeshwa!')) return;
-  data = [];
-  saveData();
-  renderFaces();
-  alert('Picha zote na kura zote zimefutwa!');
-}
-
-function addNewImage() {
-  const name = document.getElementById('imageName').value.trim();
-  const fileInput = document.getElementById('imageUpload');
-  const file = fileInput.files[0];
-
-  if (!name || !file) {
-    alert('Tafadhali jaza jina na chagua picha.');
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    data.push({name: name, img: e.target.result, votes: 0, voted: false});
-    saveData();
-    renderFaces();
-    alert('Picha imeongezwa!');
-    document.getElementById('imageName').value = '';
-    fileInput.value = '';
-  };
-  reader.readAsDataURL(file);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadData();
-  renderFaces();
-});
-
-</script>
-
-<script>
-  function showRules() {
-    document.getElementById('rulesModal').style.display = 'block';
-  }
-  function closeRules() {
-    document.getElementById('rulesModal').style.display = 'none';
-  }
-
-  function submitStudentImage() {
-  const name = document.getElementById('studentName').value.trim();
-  const fileInput = document.getElementById('studentImage');
-  const file = fileInput.files[0];
-  const consent = document.getElementById('studentConsent').checked;
-
-  if (!name || !file) {
-    alert("Tafadhali jaza jina na chagua picha.");
-    return;
-  }
-
-  if (!consent) {
-    alert("Lazima ukubali Terms & Privacy ili kuendelea.");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    data.push({ name: name, img: e.target.result, votes: 0 });
-    saveData();
-    renderFaces();
-    alert("Picha yako imewasilishwa! Asante kwa kushiriki.");
-    document.getElementById('studentName').value = '';
-    document.getElementById('studentImage').value = '';
-    document.getElementById('studentConsent').checked = false;
-  };
-  reader.readAsDataURL(file);
-}
+        function checkAdmin() {
+            const passInput = document.getElementById('adminPass');
+            const pass = passInput.value;
+            // You should use a more secure way to manage admin password in a real application
+            // For this pure HTML/JS example, it's hardcoded.
+            if (pass === '1234') {
+                document.getElementById('adminControls').classList.remove('hidden');
+                alert('Umeingia kama Admin');
+                passInput.value = '';
+            } else {
+                alert('Password sio sahihi');
+                document.getElementById('adminControls').classList.add('hidden');
+            }
+        }
 
 
+        // Updated vote function to interact with Supabase
+        async function vote(participantId) {
+            // Find the participant in the local data array by ID
+            const participantIndex = data.findIndex(p => p.id === participantId);
+            if (participantIndex === -1) {
+                console.error('Participant not found locally:', participantId);
+                alert('Kosa: Mshiriki hakupatikana!');
+                return;
+            }
 
-  </script>
+            if(data[participantIndex].voted) {
+                alert('Umeshapiga kura kwa huyu tayari!');
+                return;
+            }
 
-  
-  
+            // Increment votes locally first for immediate UI feedback
+            data[participantIndex].votes++;
+            data[participantIndex].voted = true; // Mark as voted in the current session
+            saveData(); // Save local state (e.g., voted status)
+
+            alert(`Umeweza kumpigia kura ${data[participantIndex].name}!`);
+
+            try {
+                // Update votes in Supabase database
+                const { data: updateData, error: updateError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .update({ votes: data[participantIndex].votes }) // Update the votes count
+                    .eq('id', participantId); // Where ID matches
+
+                if (updateError) {
+                    console.error('Error updating votes in Supabase:', updateError.message);
+                    alert('Kosa wakati wa kusasisha kura: ' + updateError.message);
+                    // Optionally, revert local changes if Supabase update fails
+                    data[participantIndex].votes--;
+                    data[participantIndex].voted = false;
+                    saveData();
+                } else {
+                    console.log('Votes updated successfully for:', participantId);
+                    // Reload data from Supabase to ensure consistency, especially for leaderboard
+                    loadParticipantsFromSupabase(); // This will also call renderLeaderboard and renderFaces
+                }
+            } catch (error) {
+                console.error('An unexpected error occurred during vote:', error.message);
+                alert('Kosa lisilotarajiwa limetokea wakati wa kupiga kura: ' + error.message);
+                // Revert local changes on unexpected error
+                data[participantIndex].votes--;
+                data[participantIndex].voted = false;
+                saveData();
+            }
+
+            showNext(); // Move to the next pair after voting
+        }
+
+
+        function renderLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+
+            console.log('--- Rendering Leaderboard ---');
+            console.log('Leaderboard element:', leaderboard);
+            console.log('Current data array for leaderboard:', JSON.parse(JSON.stringify(data))); // Deep copy for clear log
+            console.log('Leaderboard innerHTML BEFORE update:', leaderboard.innerHTML);
+
+            if (data.length === 0) {
+                hideLeaderboard();
+                console.log('Data is empty, hiding leaderboard.');
+                return;
+            }
+            leaderboard.classList.remove('hidden');
+            console.log('Removed hidden class from leaderboard. Is it visible now?', !leaderboard.classList.contains('hidden'));
+            
+            // Clear existing content before adding new
+            leaderboard.innerHTML = ''; 
+            leaderboard.innerHTML += '<h3>Leaderboard - Wanafunzi Wenye Kura Zaidi</h3>'; // Use += for the heading
+
+            const sorted = [...data].sort((a, b) => b.votes - a.votes);
+            sorted.forEach((d, i) => {
+                const div = document.createElement('div');
+                div.textContent = `${i + 1}. ${d.name} - Kura: ${d.votes}`;
+                leaderboard.appendChild(div);
+            });
+
+            console.log('Leaderboard innerHTML AFTER update:', leaderboard.innerHTML);
+            console.log('--- Leaderboard Rendered ---');
+        }
+
+        function hideLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.classList.add('hidden');
+            leaderboard.innerHTML = '';
+        }
+
+        // Updated resetVotes function to interact with Supabase
+        async function resetVotes() {
+            if (!confirm('Unataka kufuta kura zote? Hii itafuta kura zote kwenye database pia.')) return;
+
+            try {
+                // Update all rows in the participant table, setting votes to 0
+                const { data: updateData, error: updateError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .update({ votes: 0 })
+                    .neq('votes', -1); // Condition to update all rows (e.g., where votes is not -1, effectively all)
+
+                if (updateError) {
+                    console.error('Error resetting votes in Supabase:', updateError.message);
+                    alert('Kosa wakati wa kufuta kura: ' + updateError.message);
+                } else {
+                    console.log('All votes reset successfully in Supabase.');
+                    // Also reset local data array and re-render
+                    data.forEach(d => {
+                        d.votes = 0;
+                        d.voted = false;
+                    });
+                    saveData(); // Update local storage
+                    renderFaces(); // Re-render UI
+                    alert('Kura zote zimefutwa!');
+                }
+            } catch (error) {
+                console.error('An unexpected error occurred during vote reset:', error.message);
+                alert('Kosa lisilotarajiwa limetokea wakati wa kufuta kura: ' + error.message);
+            }
+        }
+
+        // Updated resetAll function to interact with Supabase
+        async function resetAll() {
+            if (!confirm('Una uhakika unataka kufuta picha zote na kura zote? Hii haiwezi kurejeshwa na itafuta data yote kwenye Supabase!')) return;
+
+            try {
+                // 1. Delete all records from the 'participant' table
+                const { error: deleteDbError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .delete()
+                    .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all records (assuming no ID is '0')
+
+                if (deleteDbError) {
+                    console.error('Error deleting participant data from database:', deleteDbError.message);
+                    alert('Kosa wakati wa kufuta data ya washiriki kwenye database: ' + deleteDbError.message);
+                    return;
+                }
+                console.log('All participant data deleted from database.');
+
+                // 2. Delete all files from the storage bucket
+                // First, list all files in the bucket
+                const { data: files, error: listError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .list(''); // List all files in the root of the bucket
+
+                if (listError) {
+                    console.error('Error listing files in storage:', listError.message);
+                    alert('Kosa wakati wa kuorodhesha picha kwenye storage: ' + listError.message);
+                    return;
+                }
+
+                if (files && files.length > 0) {
+                    const filePaths = files.map(file => file.name);
+                    const { data: deleteStorageData, error: deleteStorageError } = await supabase.storage
+                        .from(BUCKET_NAME)
+                        .remove(filePaths);
+
+                    if (deleteStorageError) {
+                        console.error('Error deleting images from storage:', deleteStorageError.message);
+                        alert('Kosa wakati wa kufuta picha kwenye storage: ' + deleteStorageError.message);
+                        return;
+                    }
+                    console.log('All images deleted from storage:', deleteStorageData);
+                } else {
+                    console.log('No images found in storage to delete.');
+                }
+
+
+                // Reset local data and UI
+                data = [];
+                saveData();
+                renderFaces();
+                alert('Picha zote na kura zote zimefutwa!');
+
+            } catch (error) {
+                console.error('An unexpected error occurred during full reset:', error.message);
+                alert('Kosa lisilotarajiwa limetokea wakati wa kufuta kila kitu: ' + error.message);
+            }
+        }
+
+        // This addNewImage function is for Admin.
+        async function addNewImage() {
+            const name = document.getElementById('imageName').value.trim();
+            const fileInput = document.getElementById('imageUpload');
+            const file = fileInput.files[0];
+
+            if (!name || !file) {
+                alert('Tafadhali jaza jina na chagua picha.');
+                return;
+            }
+
+            try {
+                // Upload image to Supabase Storage
+                const fileName = `${Date.now()}-${file.name}`;
+                const filePath = fileName; // Path inside the bucket
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+
+                if (uploadError) {
+                    console.error('Error uploading image (Admin):', uploadError.message);
+                    alert('Kosa wakati wa kupakia picha (Admin): ' + uploadError.message);
+                    return;
+                }
+
+                // Get public URL
+                const { data: publicUrlData } = supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(filePath);
+
+                if (!publicUrlData || !publicUrlData.publicUrl) {
+                    throw new Error('Could not get public URL for the uploaded image (Admin).');
+                }
+                const imageUrl = publicUrlData.publicUrl;
+                console.log('Admin uploaded image URL:', imageUrl);
+
+                // Insert participant data into Supabase Database
+                const { data: insertData, error: insertError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .insert([
+                        { name: name, image_url: imageUrl, votes: 0 } // Initialize votes to 0
+                    ])
+                    .select(); // Request inserted data back to get the ID
+
+                if (insertError) {
+                    console.error('Error inserting participant data (Admin):', insertError.message);
+                    alert('Kosa wakati wa kuweka data ya mshiriki (Admin): ' + insertError.message);
+                    // Optionally, delete the uploaded file if DB insert fails
+                    await supabase.storage.from(BUCKET_NAME).remove([filePath]);
+                    return;
+                }
+
+                alert('Picha imeongezwa!');
+                document.getElementById('imageName').value = '';
+                fileInput.value = '';
+
+                // Reload data from Supabase to update UI
+                loadParticipantsFromSupabase();
+
+            } catch (error) {
+                console.error('An unexpected error occurred during admin image upload:', error.message);
+                alert('Kosa lisilotarajiwa limetokea wakati wa kupakia picha ya admin: ' + error.message);
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Instead of loading from local storage primarily, load from Supabase
+            loadParticipantsFromSupabase();
+        });
+
+    </script>
+
+    <script>
+        function showRules() {
+            document.getElementById('rulesModal').style.display = 'block';
+        }
+        function closeRules() {
+            document.getElementById('rulesModal').style.display = 'none';
+        }
+
+        /**
+         * Handles student image submission, including:
+         * 1. Validation of inputs and consent.
+         * 2. Uploading the image to Supabase Storage.
+         * 3. Getting the public URL of the uploaded image.
+         * 4. Inserting participant name and image URL into Supabase Database.
+         * 5. Providing user feedback.
+         */
+        async function submitStudentImage() {
+            const name = document.getElementById('studentName').value.trim();
+            const fileInput = document.getElementById('studentImage');
+            const file = fileInput.files[0];
+            const consent = document.getElementById('studentConsent').checked;
+
+            // 1. Validation
+            if (!name || !file) {
+                alert("Tafadhali jaza jina na chagua picha.");
+                return;
+            }
+
+            if (!consent) {
+                alert("Lazima ukubali Terms & Privacy ili kuendelea.");
+                return;
+            }
+
+            // Indicate processing to the user
+            const submitButton = document.querySelector('.student-upload button');
+            submitButton.textContent = 'Inapakia... Tafadhali Subiri...';
+            submitButton.disabled = true;
+
+            try {
+                // 2. Upload the selected image file to Supabase Storage
+                // Generate a unique file name using timestamp + original name
+                const fileName = `${Date.now()}-${file.name}`;
+                const filePath = `student_uploads/${fileName}`; // Store in a subfolder for clarity
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(filePath, file, {
+                        cacheControl: '3600', // Cache for 1 hour
+                        upsert: false // Do not overwrite if file exists
+                    });
+
+                if (uploadError) {
+                    console.error('Error uploading student image:', uploadError.message);
+                    alert('Kosa wakati wa kupakia picha yako: ' + uploadError.message);
+                    return;
+                }
+
+                // 3. Get the public URL of the uploaded file
+                const { data: publicUrlData } = supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(filePath);
+
+                if (!publicUrlData || !publicUrlData.publicUrl) {
+                    throw new Error('Could not get public URL for your uploaded image.');
+                }
+                const imageUrl = publicUrlData.publicUrl;
+                console.log('Student uploaded image URL:', imageUrl);
+
+                // 4. Insert a new row in the 'participant' table with the participant’s name and the image URL
+                const { data: insertData, error: insertError } = await supabase
+                    .from(PARTICIPANT_TABLE_NAME)
+                    .insert([
+                        { name: name, image_url: imageUrl, votes: 0 } // Initialize votes to 0 for new participants
+                    ]);
+
+                if (insertError) {
+                    console.error('Error inserting student participant data:', insertError.message);
+                    alert('Kosa wakati wa kuhifadhi taarifa zako: ' + insertError.message);
+                    // Optionally, delete the uploaded file if DB insert fails
+                    await supabase.storage.from(BUCKET_NAME).remove([filePath]);
+                    return;
+                }
+
+                alert("Picha yako imewasilishwa! Asante kwa kushiriki.");
+
+                // Clear form fields and reset button
+                document.getElementById('studentName').value = '';
+                document.getElementById('studentImage').value = '';
+                document.getElementById('studentConsent').checked = false;
+
+                // 5. Reload data from Supabase to update the main display
+                loadParticipantsFromSupabase();
+
+            } catch (error) {
+                console.error('An unexpected error occurred during student submission:', error.message);
+                alert('Kosa lisilotarajiwa limetokea: ' + error.message);
+            } finally {
+                // Always reset button state
+                submitButton.textContent = 'Tuma Picha';
+                submitButton.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
