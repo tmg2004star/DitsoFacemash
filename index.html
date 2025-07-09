@@ -2,20 +2,30 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DITSO FACEMASH </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DITSO FACEMASH</title>
 
     <style>
-        /* Your existing styles here */
-        * { box-sizing: border-box; }
-        body {
+        /* Global Styles: Kuhakikisha kila kitu kinajipanga vizuri */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            background: #fafafa;
-            color: #222;
-            user-select: none;
         }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: linear-gradient(to bottom right, #f0f2f5, #e0e2e5); /* Gradient background */
+            color: #222;
+            min-height: 100vh; /* Hakikisha body inachukua urefu wote wa skrini */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centering content horizontally */
+            padding-bottom: 80px; /* Nafasi ya kutosha chini kwa About Us button */
+            user-select: none; /* Kuzuia kuchagua maandishi */
+        }
+
+        /* Powered by TMG DIGtech */
         #powered {
             position: fixed;
             top: 12px;
@@ -25,190 +35,393 @@
             color: #555;
             letter-spacing: 0.06em;
             opacity: 0.7;
+            z-index: 10;
         }
+        #powered a {
+            color: #555;
+            text-decoration: none;
+        }
+        #powered a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header Styles */
         header {
-            padding: 60px 20px 30px;
+            padding: 40px 20px 20px; /* Punguza padding kwa mobile */
             text-align: center;
+            width: 100%;
         }
         header h1 {
             margin: 0;
             font-weight: 900;
-            font-size: 3.5rem;
-            letter-spacing: 0.12em;
+            font-size: 2.8rem; /* Punguza ukubwa wa fonti kwa mobile */
+            letter-spacing: 0.1em;
             color: #202020;
             text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         header h2 {
             margin: 8px 0 0;
             font-weight: 700;
-            font-size: 1.7rem;
+            font-size: 1.4rem; /* Punguza ukubwa wa fonti kwa mobile */
             color: #555;
             font-style: italic;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
         }
+
+        /* Container for Voting Faces */
         .container {
             display: flex;
+            flex-direction: column; /* Panga picha moja chini ya nyingine kwa mobile */
             justify-content: center;
-            gap: 50px;
-            margin: 40px 20px;
-            flex-wrap: wrap;
+            align-items: center; /* Centering for portrait mode */
+            gap: 30px; /* Nafasi kati ya picha */
+            margin: 30px 20px;
+            width: 100%;
+            max-width: 400px; /* Weka max-width kwa simu */
         }
+
+        /* Individual Face Card Styles */
         .face {
             background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            width: 230px;
-            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-            transition: border-color 0.2s ease;
+            border: 1px solid #ddd;
+            border-radius: 12px; /* Rounded corners zaidi */
+            width: 100%; /* Chukua upana wote unaopatikana */
+            max-width: 320px; /* Max width kwa picha moja */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Kivuli kikubwa zaidi */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
+            overflow: hidden; /* Hakikisha picha haitoki nje ya mipaka */
         }
         .face:hover {
-            border-color: #4267b2;
+            transform: translateY(-5px); /* Athari ya kuinuka kidogo */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         .face img {
             width: 100%;
-            height: 230px;
+            height: 280px; /* Ukubwa mkubwa zaidi wa picha kwa mobile */
             object-fit: cover;
-            border-radius: 6px 6px 0 0;
+            border-radius: 10px 10px 0 0; /* Rounded top corners */
         }
         .face h3 {
-            margin: 12px 0 8px;
+            margin: 15px 0 10px;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             color: #111;
+            text-align: center;
+            padding: 0 10px;
         }
         .face button {
-            margin-bottom: 15px;
-            background: #4267b2;
+            margin-bottom: 0; /* Ondoa margin ya chini */
+            background: linear-gradient(to right, #4267b2, #365899); /* Gradient button */
             border: none;
             color: white;
-            padding: 10px 0;
+            padding: 15px 0; /* Padding kubwa zaidi kwa button */
             width: 100%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            border-radius: 0 0 8px 8px;
+            border-radius: 0 0 12px 12px; /* Rounded bottom corners */
             letter-spacing: 0.05em;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.1s ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 2px rgba(0,0,0,0.2);
         }
         .face button:hover {
-            background: #365899;
+            background: linear-gradient(to right, #365899, #2d4a80);
+            transform: translateY(-1px);
         }
+        .face button:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 rgba(0,0,0,0.2);
+        }
+        .face button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            text-align: center;
+            margin-top: 20px; /* Punguza margin ya juu */
+            margin-bottom: 40px;
+            display: flex; /* Panga buttons kando kando */
+            justify-content: center;
+            gap: 15px; /* Nafasi kati ya buttons */
+            width: 100%;
+            max-width: 400px;
+        }
+        .nav-buttons button {
+            background: #6c757d; /* Rangi ya kijivu */
+            color: white;
+            font-weight: bold;
+            padding: 12px 25px; /* Padding kubwa zaidi */
+            border: none;
+            border-radius: 8px; /* Rounded corners */
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            flex-grow: 1; /* Zichukue nafasi sawa */
+        }
+        .nav-buttons button:hover {
+            background: #495057;
+            transform: translateY(-1px);
+        }
+        .nav-buttons button:active {
+            transform: translateY(1px);
+        }
+
+        /* Leaderboard Styles */
         #leaderboard {
-            max-width: 420px;
+            max-width: 400px; /* Max width kwa mobile */
+            width: 90%; /* Chukua 90% ya upana wa skrini */
             margin: 30px auto 50px;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-            padding: 20px 25px;
+            border-radius: 12px; /* Rounded corners zaidi */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Kivuli kikubwa zaidi */
+            padding: 25px 30px; /* Padding kubwa zaidi */
             font-weight: 600;
-            color: #222; /* Hii ni rangi ya maandishi, inatosha */
+            color: #222;
             letter-spacing: 0.05em;
-
-            /* MISTARI MIPYA YA ZIADA KWA AJILI YA KUTATUA TATIZO */
-            position: relative; /* Muhimu kwa z-index kufanya kazi */
-            z-index: 9999;     /* Kuiweka juu ya vipengele vingine */
-            border: 5px solid blue !important; /* Mpaka mkali wa bluu ili kuonekana */
-            background-color: lightyellow !important; /* Background ya njano nyepesi */
+            position: relative; /* Kwa z-index */
+            z-index: 1; /* Hakikisha haifunikiwi na modali */
         }
         #leaderboard h3 {
-            margin: 0 0 18px;
+            margin: 0 0 20px; /* Nafasi kubwa zaidi chini ya heading */
             font-weight: 900;
-            font-size: 1.6rem;
-            letter-spacing: 0.1em;
+            font-size: 1.8rem; /* Ukubwa mkubwa zaidi wa fonti */
+            letter-spacing: 0.08em;
             text-align: center;
+            color: #333;
         }
         #leaderboard div {
-            padding: 8px 0;
+            padding: 12px 0; /* Padding kubwa zaidi */
             border-bottom: 1px solid #eee;
-            font-size: 1.1rem;
+            font-size: 1.15rem; /* Ukubwa mkubwa zaidi wa fonti */
+            display: flex; /* Panga jina na kura kando kando */
+            justify-content: space-between;
+            align-items: center;
         }
         #leaderboard div:last-child {
             border-bottom: none;
         }
-        .admin {
-            max-width: 480px;
+        #leaderboard div span:first-child {
+            font-weight: 700;
+            color: #444;
+        }
+        #leaderboard div span:last-child {
+            font-weight: 900;
+            color: #4267b2; /* Rangi ya kura */
+        }
+
+        /* Admin Section Styles */
+        .admin, .student-upload {
+            max-width: 400px; /* Max width kwa mobile */
+            width: 90%; /* Chukua 90% ya upana wa skrini */
             background: white;
-            margin: 0 auto 50px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            margin: 40px auto;
+            border-radius: 12px; /* Rounded corners zaidi */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Kivuli kikubwa zaidi */
             padding: 25px 30px;
         }
-        .admin h3 {
+        .admin h3, .student-upload h3 {
             margin-top: 0;
             font-weight: 900;
             font-size: 1.8rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 15px;
+            letter-spacing: 0.08em;
+            margin-bottom: 20px;
             text-align: center;
+            color: #333;
         }
-        .admin input[type="password"], .admin input[type="text"], .admin input[type="file"] {
+        .admin input[type="password"],
+        .admin input[type="text"],
+        .admin input[type="file"],
+        .student-upload input[type="text"],
+        .student-upload input[type="file"] {
             width: 100%;
-            font-size: 1rem;
-            padding: 12px 10px;
+            font-size: 1.1rem; /* Ukubwa mkubwa wa fonti */
+            padding: 12px 15px; /* Padding kubwa zaidi */
             margin-bottom: 15px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            transition: border-color 0.25s ease;
+            border: 1px solid #ddd;
+            border-radius: 8px; /* Rounded corners */
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .admin input:focus {
+        .admin input:focus, .student-upload input:focus {
             outline: none;
             border-color: #4267b2;
+            box-shadow: 0 0 0 3px rgba(66, 103, 178, 0.2);
         }
-        .admin button {
+        .admin button, .student-upload button {
             width: 100%;
             font-weight: 700;
-            font-size: 1.1rem;
-            background: #4267b2;
+            font-size: 1.2rem; /* Ukubwa mkubwa wa fonti */
+            background: linear-gradient(to right, #4267b2, #365899); /* Gradient button */
             color: white;
             border: none;
-            padding: 12px 0;
-            border-radius: 6px;
+            padding: 15px 0; /* Padding kubwa zaidi */
+            border-radius: 8px; /* Rounded corners */
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
         }
-        .admin button:hover {
-            background: #365899;
+        .admin button:hover, .student-upload button:hover {
+            background: linear-gradient(to right, #365899, #2d4a80);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+        }
+        .admin button:active, .student-upload button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .admin button.resetAll {
-            background: #dc3545;
-            margin-top: 12px;
+            background: linear-gradient(to right, #dc3545, #a71d2a); /* Rangi nyekundu ya gradient */
+            margin-top: 15px;
         }
         .admin button.resetAll:hover {
-            background: #a71d2a;
+            background: linear-gradient(to right, #a71d2a, #7d151f);
         }
         .hidden { display: none; }
-        .nav-buttons {
+
+        /* Modal Styles (Rules & About Us) */
+        #rulesModal, #aboutModal {
+            display: none; /* Default hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000; /* Juu ya vipengele vyote */
+            display: flex; /* Tumia flexbox kwa centering */
+            align-items: center;
+            justify-content: center;
+        }
+        #rulesModal > div, #aboutModal > div {
+            background: white;
+            max-width: 90%; /* Upana wa max kwa mobile */
+            width: 500px; /* Max width kwa desktop */
+            margin: 20px; /* Margin pande zote */
+            padding: 25px 30px;
+            border-radius: 15px; /* Rounded corners zaidi */
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: left;
+        }
+        #rulesModal h2, #aboutModal h2 {
             text-align: center;
-            margin-bottom: 40px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #333;
         }
-        .nav-buttons button {
-            background: #888;
-            color: white;
-            font-weight: bold;
-            padding: 10px 20px;
-            margin: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        #rulesModal p, #aboutModal p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #555;
             font-size: 1rem;
+        }
+        #rulesModal button, #aboutModal button {
+            display: block;
+            margin: 20px auto 0; /* Centering button */
+            padding: 12px 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
             transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .nav-buttons button:hover {
-            background: #444;
+        #rulesModal button {
+            background: linear-gradient(to right, #dc3545, #a71d2a);
+            color: white;
         }
-        @media (max-width: 580px) {
+        #rulesModal button:hover {
+            background: linear-gradient(to right, #a71d2a, #7d151f);
+        }
+        #aboutModal #closeAbout {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #dc3545;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%; /* Make it round */
+            font-size: 1rem;
+            width: 40px; /* Fixed size */
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #aboutModal #closeAbout:hover {
+            background: #a71d2a;
+        }
+
+        /* About Us Button at bottom right */
+        #aboutBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #4267b2, #365899);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #aboutBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        #aboutBtn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive Adjustments for larger screens (Tablets & Desktops) */
+        @media (min-width: 768px) {
+            header {
+                padding: 60px 20px 30px;
+            }
+            header h1 {
+                font-size: 3.5rem;
+            }
+            header h2 {
+                font-size: 1.7rem;
+            }
             .container {
-                flex-direction: column;
-                gap: 30px;
-                align-items: center;
+                flex-direction: row; /* Panga picha kando kando kwenye desktop */
+                gap: 50px;
+                max-width: 960px; /* Weka max-width kubwa zaidi */
             }
             .face {
-                width: 90vw;
-                max-width: 320px;
+                width: 280px; /* Ukubwa maalum wa picha kwenye desktop */
+                height: auto;
+            }
+            .face img {
+                height: 280px;
+            }
+            .nav-buttons {
+                max-width: 600px;
+            }
+            #leaderboard, .admin, .student-upload {
+                max-width: 550px; /* Upana mkubwa zaidi kwa desktop */
+                width: 80%;
+            }
+            #rulesModal > div, #aboutModal > div {
+                max-width: 600px;
             }
         }
     </style>
-    <button onclick="showRules()" style="display:block; margin: 30px auto; padding: 10px 20px; background:#444; color:white; font-weight:700; border:none; border-radius:6px;">Rules & Privacy</button>
+    <!-- Kitufe cha Rules & Privacy kimeondolewa hapa na kuhamishiwa ndani ya About Us modal -->
+    <!-- <button onclick="showRules()" style="display:block; margin: 30px auto; padding: 10px 20px; background:#444; color:white; font-weight:700; border:none; border-radius:6px;">Rules & Privacy</button> -->
 
     <div id="rulesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000;">
         <div style="background:white; max-width:600px; margin:100px auto; padding:25px 30px; border-radius:10px; position:relative;">
@@ -226,13 +439,13 @@
 </head>
 <body>
 
-    <button id="aboutBtn" style="position: fixed; bottom: 15px; right: 15px; background: #4267b2; color: white; border: none; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 8px rgb(0 0 0 / 0.2); z-index: 1000;">
+    <button id="aboutBtn">
         About Us
     </button>
 
-    <div id="aboutModal" style="display:none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100vw; height: 100vh; overflow: auto; background-color: rgba(0,0,0,0.6);">
-        <div style="background: white; margin: 10% auto; padding: 20px 30px; border-radius: 10px; max-width: 500px; position: relative; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);">
-            <h2 style="text-align: center; font-weight: 900; margin-bottom: 15px;">About DITSO FACEMASH</h2>
+    <div id="aboutModal">
+        <div>
+            <h2>About DITSO FACEMASH</h2>
             <p>
                 DITSO FACEMASH ni jukwaa la kipekee lililoundwa kwa ajili ya wanafunzi wa DIT Campus Mwanza kujiburudisha na kujionea nani ana mvuto zaidi au ni "moto" chuoni.
             </p>
@@ -245,29 +458,11 @@
             <p>
                 Usisahau kushiriki, kupiga kura, na kushindana kwa joto! Zawadi zitatolewa kwa washindi wa wiki na mwezi.
             </p>
-            <button id="closeAbout" style="position: absolute; top: 10px; right: 15px; background: #dc3545; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: 700;">X</button>
+            <!-- Kitufe kipya cha Rules & Privacy ndani ya About Us modal -->
+            <button onclick="showRulesFromAbout()" style="background:#007bff; color:white; font-weight:700; border:none; padding:10px 20px; border-radius:6px; margin-top:20px; display:block; width:fit-content; margin-left:auto; margin-right:auto;">Rules & Privacy</button>
+            <button id="closeAbout">X</button>
         </div>
     </div>
-
-    <script>
-        const aboutBtn = document.getElementById('aboutBtn');
-        const aboutModal = document.getElementById('aboutModal');
-        const closeAbout = document.getElementById('closeAbout');
-
-        aboutBtn.addEventListener('click', () => {
-            aboutModal.style.display = 'block';
-        });
-
-        closeAbout.addEventListener('click', () => {
-            aboutModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === aboutModal) {
-                aboutModal.style.display = 'none';
-            }
-        });
-    </script>
 
 
     <div id="powered"><a href="https://www.instagram.com/tmg_digital_tech?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
@@ -277,7 +472,7 @@
         <h2>NANI WA MOTO?</h2>
     </header>
     <div class="container" id="votingArea">
-        <p>Hakuna picha za kutosha. Admin tafadhali pakia picha na majina.</p>
+        <p style="text-align: center; color: #666; font-size: 1.1rem; padding: 20px;">Hakuna picha za kutosha. Admin tafadhali pakia picha na majina.</p>
     </div>
     <div class="nav-buttons hidden" id="navButtons">
         <button onclick="showPrevious()">Previous</button>
@@ -286,16 +481,16 @@
     <div id="leaderboard" class="hidden"></div>
 
 
-    <div class="student-upload" style="max-width: 480px; margin: 40px auto; background: white; padding: 25px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-        <h3 style="text-align:center;">Tuma Picha Yako</h3>
+    <div class="student-upload">
+        <h3>Tuma Picha Yako</h3>
         <p style="font-size: 14px; color: #555;">Unaruhusiwa kutuma picha yako kwa hiari ili ushiriki kwenye DITSO Facemash. Tafadhali jaza taarifa zako kisha pakia picha.</p>
-        <input type="text" id="studentName" placeholder="Jina Kamili" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:6px;" />
-        <input type="file" id="studentImage" accept="image/*" style="width:100%; padding:10px; margin:10px 0;"/>
+        <input type="text" id="studentName" placeholder="Jina Kamili" />
+        <input type="file" id="studentImage" accept="image/*" />
         <label style="font-size: 14px; display: block; margin: 10px 0;">
             <input type="checkbox" id="studentConsent" />
-            Ninakubali <a href="#" onclick="showRules()" style="color:#4267b2;">Terms & Privacy</a> na ninatoa idhini ya picha yangu kutumika kwenye app hii.
+            Ninakubali <a href="#" onclick="showRulesFromConsent()" style="color:#4267b2;">Terms & Privacy</a> na ninatoa idhini ya picha yangu kutumika kwenye app hii.
         </label>
-        <button onclick="submitStudentImage()" style="width:100%; padding:12px; font-weight:bold; background:#4267b2; color:white; border:none; border-radius:6px; font-size:16px;">Tuma Picha</button>
+        <button onclick="submitStudentImage()">Tuma Picha</button>
     </div>
 
 
@@ -344,13 +539,17 @@
             }
 
             if (participants) {
-                // Map Supabase data to your existing `data` structure
+                // Load local voted status from localStorage
+                const localVotedData = JSON.parse(localStorage.getItem('facemashData') || '[]');
+                const localVotedMap = new Map(localVotedData.map(p => [p.id, p.voted]));
+
                 data = participants.map(p => ({
                     id: p.id, // Assuming your table has an 'id' column
                     name: p.name,
                     img: p.image_url,
                     votes: p.votes || 0, // Assuming a 'votes' column, default to 0 if null/undefined
-                    voted: false // This 'voted' state should likely be managed client-side per session or per user if you implement user authentication
+                    // Merge voted status from local storage, default to false if not found locally
+                    voted: localVotedMap.has(p.id) ? localVotedMap.get(p.id) : false
                 }));
                 console.log('Participants loaded from Supabase:', data);
                 renderFaces(); // Re-render faces after loading data
@@ -378,7 +577,7 @@
         function renderFaces() {
             const area = document.getElementById('votingArea');
             if (data.length < 2) {
-                area.innerHTML = '<p>Hakuna picha za kutosha. Tafadhali admin pakia picha na majina.</p>';
+                area.innerHTML = '<p style="text-align: center; color: #666; font-size: 1.1rem; padding: 20px;">Hakuna picha za kutosha. Tafadhali admin pakia picha na majina.</p>';
                 hideLeaderboard();
                 document.getElementById('navButtons').classList.add('hidden');
                 return;
@@ -409,6 +608,7 @@
             [i, j].forEach(idx => {
                 const face = document.createElement('div');
                 face.className = 'face';
+                // Tumia span kwa jina na kura ili kupangilia vizuri
                 face.innerHTML = `
                     <img src="${data[idx].img}" alt="${data[idx].name}" />
                     <h3>${data[idx].name}</h3>
@@ -485,7 +685,7 @@
                 }
             } catch (error) {
                 console.error('An unexpected error occurred during vote:', error.message);
-                alert('Kosa lisilotarajiwa limetokea wakati wa kupiga kura: ' + error.message);
+                alert('Kosa lisilotarajiwa limetokea wakati wa kupiga kura: ' + error.error_description || error.message);
                 // Revert local changes on unexpected error
                 data[participantIndex].votes--;
                 data[participantIndex].voted = false;
@@ -519,7 +719,8 @@
             const sorted = [...data].sort((a, b) => b.votes - a.votes);
             sorted.forEach((d, i) => {
                 const div = document.createElement('div');
-                div.textContent = `${i + 1}. ${d.name} - Kura: ${d.votes}`;
+                // Tumia span kwa jina na kura ili kupangilia vizuri na CSS mpya
+                div.innerHTML = `<span>${i + 1}. ${d.name}</span> <span>Kura: ${d.votes}</span>`;
                 leaderboard.appendChild(div);
             });
 
@@ -692,116 +893,64 @@
             }
         }
 
+        // --- GLOBAL FUNCTIONS KWA AJILI YA MODALS ---
+        // Hizi zimehamishwa hapa ili ziweze kufikiwa na event listeners zote na functions nyingine.
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Instead of loading from local storage primarily, load from Supabase
-            loadParticipantsFromSupabase();
-        });
-
-    </script>
-
-    <script>
-        function showRules() {
-            document.getElementById('rulesModal').style.display = 'block';
+        // Hii inafungua About Modal
+        function showAbout() {
+            document.getElementById('aboutModal').style.display = 'flex';
         }
+
+        // Hii inafunga About Modal
+        function closeAbout() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+
+        // Hii inafungua Rules Modal
+        function showRules() {
+            document.getElementById('rulesModal').style.display = 'flex';
+        }
+        // Hii inafunga Rules Modal
         function closeRules() {
             document.getElementById('rulesModal').style.display = 'none';
         }
 
-        /**
-         * Handles student image submission, including:
-         * 1. Validation of inputs and consent.
-         * 2. Uploading the image to Supabase Storage.
-         * 3. Getting the public URL of the uploaded image.
-         * 4. Inserting participant name and image URL into Supabase Database.
-         * 5. Providing user feedback.
-         */
-        async function submitStudentImage() {
-            const name = document.getElementById('studentName').value.trim();
-            const fileInput = document.getElementById('studentImage');
-            const file = fileInput.files[0];
-            const consent = document.getElementById('studentConsent').checked;
-
-            // 1. Validation
-            if (!name || !file) {
-                alert("Tafadhali jaza jina na chagua picha.");
-                return;
-            }
-
-            if (!consent) {
-                alert("Lazima ukubali Terms & Privacy ili kuendelea.");
-                return;
-            }
-
-            // Indicate processing to the user
-            const submitButton = document.querySelector('.student-upload button');
-            submitButton.textContent = 'Inapakia... Tafadhali Subiri...';
-            submitButton.disabled = true;
-
-            try {
-                // 2. Upload the selected image file to Supabase Storage
-                // Generate a unique file name using timestamp + original name
-                const fileName = `${Date.now()}-${file.name}`;
-                const filePath = `student_uploads/${fileName}`; // Store in a subfolder for clarity
-
-                const { data: uploadData, error: uploadError } = await supabase.storage
-                    .from(BUCKET_NAME)
-                    .upload(filePath, file, {
-                        cacheControl: '3600', // Cache for 1 hour
-                        upsert: false // Do not overwrite if file exists
-                    });
-
-                if (uploadError) {
-                    console.error('Error uploading student image:', uploadError.message);
-                    alert('Kosa wakati wa kupakia picha yako: ' + uploadError.message);
-                    return;
-                }
-
-                // 3. Get the public URL of the uploaded file
-                const { data: publicUrlData } = supabase.storage
-                    .from(BUCKET_NAME)
-                    .getPublicUrl(filePath);
-
-                if (!publicUrlData || !publicUrlData.publicUrl) {
-                    throw new Error('Could not get public URL for your uploaded image.');
-                }
-                const imageUrl = publicUrlData.publicUrl;
-                console.log('Student uploaded image URL:', imageUrl);
-
-                // 4. Insert a new row in the 'participant' table with the participant’s name and the image URL
-                const { data: insertData, error: insertError } = await supabase
-                    .from(PARTICIPANT_TABLE_NAME)
-                    .insert([
-                        { name: name, image_url: imageUrl, votes: 0 } // Initialize votes to 0 for new participants
-                    ]);
-
-                if (insertError) {
-                    console.error('Error inserting student participant data:', insertError.message);
-                    alert('Kosa wakati wa kuhifadhi taarifa zako: ' + insertError.message);
-                    // Optionally, delete the uploaded file if DB insert fails
-                    await supabase.storage.from(BUCKET_NAME).remove([filePath]);
-                    return;
-                }
-
-                alert("Picha yako imewasilishwa! Asante kwa kushiriki.");
-
-                // Clear form fields and reset button
-                document.getElementById('studentName').value = '';
-                document.getElementById('studentImage').value = '';
-                document.getElementById('studentConsent').checked = false;
-
-                // 5. Reload data from Supabase to update the main display
-                loadParticipantsFromSupabase();
-
-            } catch (error) {
-                console.error('An unexpected error occurred during student submission:', error.message);
-                alert('Kosa lisilotarajiwa limetokea: ' + error.message);
-            } finally {
-                // Always reset button state
-                submitButton.textContent = 'Tuma Picha';
-                submitButton.disabled = false;
-            }
+        // Hii inafunga About Modal kisha inafungua Rules Modal
+        function showRulesFromAbout() {
+            closeAbout(); // Funga About Modal kwanza
+            showRules();  // Kisha fungua Rules Modal
         }
+
+        // Hii inafungua Rules Modal (kwa link ya consent)
+        function showRulesFromConsent() {
+            showRules();
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // About Us Modal Listeners
+            const aboutBtn = document.getElementById('aboutBtn');
+            const aboutModal = document.getElementById('aboutModal');
+            const closeAboutBtn = document.getElementById('closeAbout'); // Renamed to avoid conflict
+
+            aboutBtn.addEventListener('click', () => {
+                showAbout(); // Tumia function mpya ya showAbout
+            });
+
+            closeAboutBtn.addEventListener('click', () => {
+                closeAbout(); // Tumia function mpya ya closeAbout
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === aboutModal) {
+                    closeAbout(); // Tumia function mpya ya closeAbout
+                }
+            });
+
+            // Load participants on page load
+            loadParticipantsFromSupabase();
+        });
+
     </script>
 </body>
 </html>
